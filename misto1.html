@@ -3,14 +3,102 @@
 <head>
   <meta charset="UTF-8">
   <title>Místo činu</title>
+  <style>
+    body {
+      background: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+
+    video {
+      width: 80%;
+      max-width: 800px;
+      border-radius: 10px;
+      border: 2px solid #444;
+    }
+
+    button, input {
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 6px;
+      border: none;
+      margin-top: 15px;
+    }
+
+    #soundBtn {
+      display: block;
+      margin: 20px auto;
+      cursor: pointer;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #next {
+      display: none;
+      margin-top: 30px;
+      font-size: 22px;
+      color: #00ffcc;
+      text-decoration: none;
+      border: 1px solid #00ffcc;
+      padding: 10px 20px;
+      border-radius: 8px;
+    }
+
+    #next:hover {
+      background: #00ffcc;
+      color: black;
+    }
+  </style>
 </head>
-<body style="background:black;color:white;text-align:center;padding:40px;">
+<body>
 
   <h1>📍 Místo činu</h1>
-  <p>Na stole leží lístek s číslem <b>4312</b>.</p>
 
-  <p>Kam dál?</p>
-  <a href="tajne.html">Zkontrolovat šuplík</a>
+  <video id="video" autoplay muted>
+    <source src="video.mp4" type="video/mp4">
+  </video>
+
+  <button id="soundBtn" onclick="enableSound()">🔊 Zapnout zvuk</button>
+
+  <p>Zadej kód, který jsi slyšel / viděl:</p>
+
+  <input type="text" id="code" placeholder="kód">
+  <button onclick="checkCode()">OK</button>
+
+  <div id="message"></div>
+
+  <a id="next" href="dalsi.html">Pokračovat →</a>
+
+  <script>
+    const video = document.getElementById("video");
+
+    function enableSound() {
+      video.muted = false;
+      video.play();
+      document.getElementById("soundBtn").style.display = "none";
+    }
+
+    function checkCode() {
+      const code = document.getElementById("code").value;
+      const message = document.getElementById("message");
+      const next = document.getElementById("next");
+
+      if (code === "1422") {
+        message.textContent = "✔️ Kód je správný.";
+        message.style.color = "#00ffcc";
+        next.style.display = "inline-block";
+      } else {
+        message.textContent = "❌ Špatný kód.";
+        message.style.color = "red";
+        next.style.display = "none";
+      }
+    }
+  </script>
 
 </body>
 </html>
