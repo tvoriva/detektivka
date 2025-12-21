@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <title>Čas běží…</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0b0b0b;
+      color: #eee;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #151515;
+      padding: 30px;
+      border-radius: 12px;
+      width: 520px;
+      box-shadow: 0 0 25px rgba(255,0,0,0.25);
+      text-align: center;
+    }
+    h1 { color: #ff5555; }
+    #timer {
+      font-size: 32px;
+      margin: 20px 0;
+      color: #ff3333;
+    }
+    .log {
+      background: #0d0d0d;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: left;
+      font-family: monospace;
+      margin-bottom: 15px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    .success { color: #2ecc71; }
+    .fail { color: #ff5555; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⚠ IP adresa se smaže</h1>
+    <div id="timer">120</div>
+
+    <div class="log" id="log"></div>
+
+    <p id="question"></p>
+
+    <input type="text" id="answer" placeholder="Odpověď" />
+    <button onclick="checkAnswer()">Potvrdit</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    // ⏱️ ČAS
+    let timeLeft = 60;
+    const timerEl = document.getElementById("timer");
+    const resultEl = document.getElementById("result");
+    const questionEl = document.getElementById("question");
+    const logEl = document.getElementById("log");
+
+    // 🧩 OTÁZKY (VÍCE KROKŮ)
+    const puzzles = [
+      {
+        log: "[LOG 22:41:03]\nNeznámý proces detekován...\nNázev: g_lc_t.exe",
+        question: "Doplň název procesu (z hovoru)",
+        answers: ["galcut", "galcut.exe"]
+      },
+      {
+        log: "[LOG 22:41:12]\nProces potvrzen.",
+        question: "Jaký je jiný operační systém než Windows?",
+        answers: ["linux", "android", "ios"]
+      },
+      {
+        log: "[LOG 22:41:25]\nIP stopa nalezena...",
+        question: "Jaká firma vyrábí procesory?",
+        answers: ["intel", "amd"]
+      },
+      {
+        log: "[LOG 22:41:40]\nSíťový provoz analyzován...",
+        question: "Hra kde se pokládají bloky",
+        answers: ["minecraft", "Minecraft"]
+      },
+      {
+        log: "[LOG 22:41:55]\nPodezřelý port otevřen: 80",
+        question: "Prezident české republiky",
+        answers: ["petr pavel", "Petr Pavel"]
+      },
+      {
+        log: "[LOG 22:42:10]\nŠifrovaná komunikace detekována",
+        question: "Jaká firma vlastní chat gpt",
+        answers: ["Openai", "openai"]
+      },
+      {
+        log: "[LOG 22:42:30]\nÚtočník maskuje identitu",
+        question: "Jak se nazývá skrytí IP adresy?",
+        answers: ["vpn", "proxy"]
+      }
+      
+    ];
+
+    let currentPuzzle = 0;
+
+    function loadPuzzle() {
+      logEl.textContent = puzzles[currentPuzzle].log;
+      questionEl.textContent = "HÁDANKA: " + puzzles[currentPuzzle].question;
+      document.getElementById("answer").value = "";
+      resultEl.textContent = "";
+    }
+
+    loadPuzzle();
+
+    // ⏱️ ODPOČET
+    const countdown = setInterval(() => {
+      timeLeft--;
+      timerEl.textContent = timeLeft;
+
+      if (timeLeft <= 10) timerEl.style.color = "#ff0000";
+
+      if (timeLeft <= 0) {
+        clearInterval(countdown);
+        resultEl.innerHTML = "<p class='fail'>IP adresa byla smazána.</p>";
+        document.querySelector("button").disabled = true;
+      }
+    }, 1000);
+
+    function checkAnswer() {
+      const input = document.getElementById("answer").value.trim().toLowerCase();
+      const validAnswers = puzzles[currentPuzzle].answers;
+
+      if (validAnswers.includes(input)) {
+        currentPuzzle++;
+
+        if (currentPuzzle >= puzzles.length) {
+          clearInterval(countdown);
+          resultEl.innerHTML = "<p class='success'>✔ Vše vyřešeno! IP zachráněna.</p>";
+          setTimeout(() => {
+            window.location.href = "google.com";
+          }, 3000);
+        } else {
+          loadPuzzle();
+        }
+      } else {
+        resultEl.innerHTML = "<p class='fail'>✖ Špatně. Čas běží…</p>";
+        timeLeft -= 5;
+      }
+    }
+  </script>
+</body>
+</html>
