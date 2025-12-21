@@ -2,7 +2,7 @@
 <html lang="cs">
 <head>
   <meta charset="UTF-8">
-  <title>📍Zadání</title>
+  <title>📍 Zadání</title>
   <style>
     body {
       background: black;
@@ -17,6 +17,7 @@
       max-width: 800px;
       border-radius: 10px;
       border: 2px solid #444;
+      margin-top: 20px;
     }
 
     button, input {
@@ -24,22 +25,16 @@
       font-size: 18px;
       border-radius: 6px;
       border: none;
-      margin-top: 15px;
+      margin: 10px;
     }
 
-    #soundBtn {
-      display: block;
-      margin: 20px auto;
+    #soundBtn, #restartBtn {
       cursor: pointer;
-    }
-
-    #restartBtn {
-      background: #333;
+      background: #222;
       color: #ccc;
-      cursor: pointer;
-      margin-left: 10px;
     }
 
+    #soundBtn:hover,
     #restartBtn:hover {
       color: white;
     }
@@ -65,6 +60,7 @@
       color: black;
     }
 
+    /* NÁPOVĚDA */
     #hintBox {
       display: none;
       margin-top: 20px;
@@ -91,12 +87,14 @@
 
   <h1>📍 Zadání</h1>
 
-  <video id="video" autoplay muted>
-    <source src="video.mp4" type="video/mp4">
-  </video>
-
+  <!-- TLAČÍTKA JSOU NAD VIDEEM -->
   <button id="soundBtn" onclick="enableSound()">🔊 Zapnout zvuk</button>
   <button id="restartBtn" onclick="restartVideo()">🔁 Přehrát znovu</button>
+
+  <video id="video" autoplay muted playsinline>
+    <source src="video.mp4" type="video/mp4">
+    Tvůj prohlížeč nepodporuje video.
+  </video>
 
   <p>Zadej IP adresu:</p>
 
