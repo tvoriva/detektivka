@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<title>Vyskakovací mise – CHALLENGE</title>
+<style>
+  body {
+    margin: 0;
+    background: #000;
+    color: #00ff99;
+    font-family: monospace;
+    overflow: hidden;
+  }
+  #message {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    color: #00ffff;
+  }
+  #timer {
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    font-size: 16px;
+  }
+  #hits {
+    position: fixed;
+    top: 30px;
+    right: 20px;
+    font-size: 16px;
+  }
+  .target {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    background: red;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 10px red;
+  }
+</style>
+</head>
+<body>
+
+<div id="message">⚠ Mise začíná! Klikni na červené okýnko 15× než čas vyprší.</div>
+<div id="timer">⏱️ Čas: <span id="time">35</span>s</div>
+<div id="hits">🎯 Zásahy: 0/15</div>
+
+<script>
+let time = 35;
+let hits = 0;
+const maxHits = 15;
+let caught = false;
+
+const timeEl = document.getElementById('time');
+const hitsEl = document.getElementById('hits');
+const msg = document.getElementById('message');
+
+const target = document.createElement('div');
+target.className = 'target';
+document.body.appendChild(target);
+
+// funkce pro náhodné pozice okýnka
+function moveTarget() {
+  const x = Math.random() * (window.innerWidth - 40);
+  const y = Math.random() * (window.innerHeight - 40);
+  target.style.left = x + 'px';
+  target.style.top = y + 'px';
+}
+
+// první pozice
+moveTarget();
+
+// odpočet času
+const timer = setInterval(() => {
+  time--;
+  timeEl.textContent = time;
+
+  if (time <= 0 && !caught) {
+    clearInterval(timer);
+    msg.innerHTML = "<span style='color:red;'>✖ Cíl unikl. Mise selhala.</span>";
+    target.style.display = 'none';
+  }
+}, 1000);
+
+// klikání na okýnko
+target.addEventListener('click', () => {
+  if (caught) return;
+  hits++;
+  hitsEl.textContent = `🎯 Zásahy: ${hits}/${maxHits}`;
+  msg.textContent = `✔ Zásah!`;
+
+  if (hits >= maxHits) {
+    caught = true;
+    clearInterval(timer);
+    msg.innerHTML = "<span style='color:#2ecc71;'>🎯 CÍL DOPADEN! Mise úspěšná.</span>";
+    target.style.display = 'none';
+    setTimeout(() => { window.location.href = "final.html"; }, 2000);
+  } else {
+    moveTarget();
+  }
+});
+
+// náhodné pohyby každých 1,5 s
+const moveInterval = setInterval(() => {
+  if (!caught) moveTarget();
+}, 1500);
+
+// penalizace za kliknutí mimo
+document.body.addEventListener('click', (e) => {
+  if (caught) return;
+  if (e.target !== target) {
+    time -= 3;
+    if (time < 0) time = 0;
+    timeEl.textContent = time;
+    msg.textContent = "❌ Špatně! Čas ubývá.";
+    moveTarget();
+  }
+});
+</script>
+
+</body>
+</html>
