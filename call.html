@@ -41,6 +41,12 @@
     .error {
       color: #ff5555;
     }
+    #continueBtn {
+      display: none;
+      background: #2ecc71;
+      border: none;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -52,36 +58,37 @@
 
     <div id="dialogBox"></div>
     <div id="hint" class="hint"></div>
+
+    <!-- ✅ TLAČÍTKO PO SKONČENÍ HOVORU -->
+    <button id="continueBtn" onclick="goNext()">Pokračovat</button>
   </div>
 
-  <!-- 🔊 Zvuk vyzvánění (nahraď souborem dle libosti) -->
+  <!-- 🔊 Zvuk vyzvánění -->
   <audio id="ringtone" loop>
     <source src="ringtone.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    // ✅ SPRÁVNÉ ČÍSLO
     const correctNumber = "782459752";
 
-    // ✅ POSTUPNÝ DIALOG (KAŽDÝ ŘÁDEK = JEDEN KLIK)
     const dialog = [
       "*vyzvánění…*",
       "Bob: Dobrý den tady Mcalister",
       "Ty: Dobrý den pane, mám pro vás pár otázek",
       "Bob: Ano, rád vám odpovím jenom mi prosím řekněte kdo jste",
-      "Ty: Jsem detektiv Mike Smith, agent ze společnosti CyberAgnet"
+      "Ty: Jsem detektiv Mike Smith, agent ze společnosti CyberAgnet",
       "Bob: Ok děkuji, ptejte se",
-      "Ty: Neukradl vám někdo Ip adresu?",
-      "Bob: ano včera mi nějaký člověk ukradl Ip adresu😭",
+      "Ty: Neukradl vám někdo IP adresu?",
+      "Bob: Ano, včera mi nějaký člověk ukradl IP adresu 😭",
       "Ty: Máte tušení jak?",
-      "Bob: No to já jsem si stahoval nějakou aplikaci a najednou mi zamrzl počítač",
-      "Ty: Víte jak jse jmenovala ta aplikace?",
+      "Bob: Stahoval jsem nějakou aplikaci a najednou mi zamrzl počítač",
+      "Ty: Víte, jak se jmenovala ta aplikace?",
       "Bob: Proč se ptáte?",
-      "Ty: Mohl bych nějak zjistit vydavatele a najít tu vaši Ip adresu",
-      "Bob: To by bylo super, jmenovala jse nějak: Galcut",
-      "Ty: Děkuji to pomůže dost",
+      "Ty: Mohl bych zjistit vydavatele a najít vaši IP adresu",
+      "Bob: To by bylo super, jmenovala se nějak: Galcut",
+      "Ty: Děkuji, to hodně pomůže",
       "Bob: Nemáte zač",
-      "*hovor ukončen**"
+      "*hovor ukončen*"
     ];
 
     let dialogIndex = 0;
@@ -89,10 +96,12 @@
     const dialogBox = document.getElementById("dialogBox");
     const hint = document.getElementById("hint");
     const ringtone = document.getElementById("ringtone");
+    const continueBtn = document.getElementById("continueBtn");
 
     function startCall() {
       const input = document.getElementById("phoneInput").value.trim();
       dialogBox.classList.remove("error");
+      continueBtn.style.display = "none";
 
       if (input !== correctNumber) {
         dialogBox.textContent = "Číslo neexistuje nebo je nedostupné.";
@@ -112,7 +121,6 @@
 
       dialogBox.textContent = dialog[dialogIndex];
 
-      // vypnutí vyzvánění po první větě
       if (dialogIndex === 0) {
         ringtone.pause();
         ringtone.currentTime = 0;
@@ -122,8 +130,13 @@
 
       if (dialogIndex === dialog.length) {
         hint.textContent = "Hovor skončil";
+        continueBtn.style.display = "block";
       }
     });
+
+    function goNext() {
+      window.location.href = "https://www.google.com";
+    }
   </script>
 </body>
 </html>
