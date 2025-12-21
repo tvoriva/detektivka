@@ -53,11 +53,33 @@
       background: #00ffcc;
       color: black;
     }
+
+    /* NÁPOVĚDA */
+    #hintBox {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px dashed #666;
+      color: #ccc;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #hintBtn {
+      background: #222;
+      color: #aaa;
+      cursor: pointer;
+    }
+
+    #hintBtn:hover {
+      color: white;
+    }
   </style>
 </head>
 <body>
 
-  <h1>📍 Místo činu</h1>
+  <h1>📍 Zadání</h1>
 
   <video id="video" autoplay muted>
     <source src="video.mp4" type="video/mp4">
@@ -65,12 +87,19 @@
 
   <button id="soundBtn" onclick="enableSound()">🔊 Zapnout zvuk</button>
 
-  <p>Zadej kód, který jsi slyšel / viděl:</p>
+  <p>Zadej IP adresu:</p>
 
   <input type="text" id="code" placeholder="kód">
   <button onclick="checkCode()">OK</button>
 
   <div id="message"></div>
+
+  <!-- NÁPOVĚDA -->
+  <button id="hintBtn" onclick="toggleHint()">🕵️ Zobrazit nápovědu</button>
+
+  <div id="hintBox">
+    Tam kde všichni s progr***váním začínají, 
+  </div>
 
   <a id="next" href="dalsi.html">Pokračovat →</a>
 
@@ -97,6 +126,11 @@
         message.style.color = "red";
         next.style.display = "none";
       }
+    }
+
+    function toggleHint() {
+      const hint = document.getElementById("hintBox");
+      hint.style.display = hint.style.display === "none" ? "block" : "none";
     }
   </script>
 
