@@ -30,6 +30,21 @@
       color: #ffffff;
       display: none;
     }
+    button {
+      margin-top: 20px;
+      padding: 10px 15px;
+      font-family: monospace;
+      font-size: 15px;
+      background: #111;
+      color: #00ff99;
+      border: 1px solid #00ff99;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background: #00ff99;
+      color: #000;
+    }
     .blink {
       animation: blink 1s infinite;
     }
@@ -47,7 +62,7 @@ Inicializace sledování IP...
 <script>
 const terminal = document.getElementById("terminal");
 
-// 🔍 ODHALENÍ IP – TERMINÁL
+// 🔍 TERMINÁL – ODHALENÍ IP
 const lines = [
   "Navazuji spojení se satelitní sítí...",
   "Dešifrování provozu...",
@@ -68,17 +83,17 @@ const lines = [
   "Sledování ukončeno."
 ];
 
-// 🧑‍💼 ZPRÁVA OD AGENTA – TADY SI JI ZMĚŇ
+// 🧑‍💼 ZPRÁVA OD AGENTA (UPRAV SI JI)
 const agentMessage = `
 📩 ZPRÁVA OD AGENTA K-7:
 
 Dobrá práce.
-IP adresu máme teď už jenom toho hackera co to ukradl
+IP adresu máme.
 
-
+Teď ho musíme sledovat v reálném čase.
+Buď připraven.
 `;
 
-// ⏱️ LOGIKA ZOBRAZENÍ
 let i = 0;
 
 function showLine() {
@@ -98,6 +113,14 @@ function showAgentMessage() {
   terminal.appendChild(agentDiv);
   agentDiv.style.display = "block";
 
+  // tlačítko pokračování
+  const btn = document.createElement("button");
+  btn.textContent = "▶ Pokračovat ve sledování";
+  btn.onclick = () => {
+    window.location.href = "track.html";
+  };
+
+  terminal.appendChild(btn);
   terminal.innerHTML += "\n\n<span class='blink'>_</span>";
 }
 
