@@ -33,6 +33,17 @@
       cursor: pointer;
     }
 
+    #restartBtn {
+      background: #333;
+      color: #ccc;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    #restartBtn:hover {
+      color: white;
+    }
+
     #message {
       margin-top: 20px;
       font-size: 18px;
@@ -54,7 +65,6 @@
       color: black;
     }
 
-    /* NÁPOVĚDA */
     #hintBox {
       display: none;
       margin-top: 20px;
@@ -86,6 +96,7 @@
   </video>
 
   <button id="soundBtn" onclick="enableSound()">🔊 Zapnout zvuk</button>
+  <button id="restartBtn" onclick="restartVideo()">🔁 Přehrát znovu</button>
 
   <p>Zadej IP adresu:</p>
 
@@ -94,11 +105,10 @@
 
   <div id="message"></div>
 
-  <!-- NÁPOVĚDA -->
   <button id="hintBtn" onclick="toggleHint()">🕵️ Zobrazit nápovědu</button>
 
   <div id="hintBox">
-    Tam kde všichni s progr***váním začínají, 
+    Tam kde všichni s progr***váním začínají,
   </div>
 
   <a id="next" href="dalsi.html">Pokračovat →</a>
@@ -110,6 +120,11 @@
       video.muted = false;
       video.play();
       document.getElementById("soundBtn").style.display = "none";
+    }
+
+    function restartVideo() {
+      video.currentTime = 0;
+      video.play();
     }
 
     function checkCode() {
