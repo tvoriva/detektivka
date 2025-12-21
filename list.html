@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>📋 Seznam jmen</title>
+  <style>
+    body {
+      background: #111;
+      color: #eee;
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #00ffcc;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      font-size: 20px;
+    }
+
+    li {
+      margin: 8px 0;
+      padding: 6px 10px;
+      background: #222;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📋 Náš seznam</h1>
+  <ul id="nameList"></ul>
+
+  <script>
+    // pevná jména, která musí být v seznamu
+    const mandatoryBobs = [
+      "Bob Mcalister",
+      "Bob Millinz",
+      "Bob Mugile"
+    ];
+
+    // další náhodná anglická jména
+    const randomNames = [
+      "Alice Johnson", "John Smith", "Emma Brown", "Michael Davis",
+      "Olivia Wilson", "James Taylor", "Sophia Moore", "Liam Anderson",
+      "Charlotte Thomas", "Henry Jackson", "Amelia White", "Daniel Harris",
+      "Evelyn Martin", "Jack Thompson", "Mia Garcia", "Noah Martinez"
+    ];
+
+    // spojíme povinná a náhodná jména
+    const allNames = mandatoryBobs.concat(randomNames);
+
+    // funkce pro zamíchání seznamu (Fisher–Yates shuffle)
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    // zamíchaný seznam
+    const shuffledNames = shuffle(allNames);
+
+    // vložíme do HTML
+    const ul = document.getElementById("nameList");
+    shuffledNames.forEach(name => {
+      const li = document.createElement("li");
+      li.textContent = name;
+      ul.appendChild(li);
+    });
+  </script>
+
+</body>
+</html>
