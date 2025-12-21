@@ -120,10 +120,16 @@ function showAgentMessage() {
   btn.onclick = () => {
     window.location.href = "https://tvoriva.github.io/detektivka/track.html";
   };
-
   terminal.appendChild(btn);
-  terminal.innerHTML += "\n\n<span class='blink'>_</span>";
+
+  // blink cursor
+  const blink = document.createElement("span");
+  blink.className = "blink";
+  blink.textContent = "_";
+  terminal.appendChild(document.createElement("br"));
+  terminal.appendChild(blink);
 }
+
 
 setTimeout(showLine, 1000);
 </script>
