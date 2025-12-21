@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <title>Telefonát</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #1c1c1c;
+      padding: 30px;
+      border-radius: 10px;
+      width: 420px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    #dialogBox {
+      margin-top: 20px;
+      min-height: 120px;
+      cursor: pointer;
+      white-space: pre-line;
+    }
+    .hint {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 5px;
+    }
+    .error {
+      color: #ff5555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Vytočit číslo</h1>
+
+    <input type="text" id="phoneInput" placeholder="Zadej telefonní číslo" />
+    <button onclick="startCall()">Zavolat</button>
+
+    <div id="dialogBox"></div>
+    <div id="hint" class="hint"></div>
+  </div>
+
+  <!-- 🔊 Zvuk vyzvánění (nahraď souborem dle libosti) -->
+  <audio id="ringtone" loop>
+    <source src="ringtone.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // ✅ SPRÁVNÉ ČÍSLO
+    const correctNumber = "123456789";
+
+    // ✅ POSTUPNÝ DIALOG (KAŽDÝ ŘÁDEK = JEDEN KLIK)
+    const dialog = [
+      "*vyzvánění…*",
+      "Neznámý hlas: Kdo vám dal tohle číslo?",
+      "Ty: Potřebuji odpovědi.",
+      "Neznámý hlas: Pokud pátráš po té vraždě… měl bys přestat.",
+      "*hovor ukončen*"
+    ];
+
+    let dialogIndex = 0;
+
+    const dialogBox = document.getElementById("dialogBox");
+    const hint = document.getElementById("hint");
+    const ringtone = document.getElementById("ringtone");
+
+    function startCall() {
+      const input = document.getElementById("phoneInput").value.trim();
+      dialogBox.classList.remove("error");
+
+      if (input !== correctNumber) {
+        dialogBox.textContent = "Číslo neexistuje nebo je nedostupné.";
+        dialogBox.classList.add("error");
+        hint.textContent = "";
+        return;
+      }
+
+      dialogIndex = 0;
+      dialogBox.textContent = "Klikni pro pokračování hovoru";
+      hint.textContent = "(klikni do dialogu)";
+      ringtone.play();
+    }
+
+    dialogBox.addEventListener("click", () => {
+      if (dialogIndex >= dialog.length) return;
+
+      dialogBox.textContent = dialog[dialogIndex];
+
+      // vypnutí vyzvánění po první větě
+      if (dialogIndex === 0) {
+        ringtone.pause();
+        ringtone.currentTime = 0;
+      }
+
+      dialogIndex++;
+
+      if (dialogIndex === dialog.length) {
+        hint.textContent = "Hovor skončil";
+      }
+    });
+  </script>
+</body>
+</html>
