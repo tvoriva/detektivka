@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Odhalení IP adresy</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      color: #00ff99;
+      font-family: monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .terminal {
+      width: 720px;
+      max-width: 95%;
+      background: #020202;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 30px rgba(0,255,150,0.3);
+      white-space: pre-line;
+    }
+    .agent {
+      margin-top: 20px;
+      padding: 15px;
+      border-left: 3px solid #00ff99;
+      color: #ffffff;
+      display: none;
+    }
+    .blink {
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="terminal" id="terminal">
+Inicializace sledování IP...
+</div>
+
+<script>
+const terminal = document.getElementById("terminal");
+
+// 🔍 ODHALENÍ IP – TERMINÁL
+const lines = [
+  "Navazuji spojení se satelitní sítí...",
+  "Dešifrování provozu...",
+  "Analýza paketů dokončena.",
+  "",
+  "IP ADRESA ÚTOČNÍKA:",
+  "→ 185.143.112.47",
+  "",
+  "Lokalita:",
+  "→ Praha, Česká republika",
+  "",
+  "Poskytovatel:",
+  "→ Neznámý privátní server",
+  "",
+  "⚠ VAROVÁNÍ:",
+  "Útočník je stále online.",
+  "",
+  "Sledování ukončeno."
+];
+
+// 🧑‍💼 ZPRÁVA OD AGENTA – TADY SI JI ZMĚŇ
+const agentMessage = `
+📩 ZPRÁVA OD AGENTA K-7:
+
+Dobrá práce.
+IP adresu máme teď už jenom toho hackera co to ukradl
+
+
+`;
+
+// ⏱️ LOGIKA ZOBRAZENÍ
+let i = 0;
+
+function showLine() {
+  if (i < lines.length) {
+    terminal.textContent += "\n" + lines[i];
+    i++;
+    setTimeout(showLine, 800);
+  } else {
+    showAgentMessage();
+  }
+}
+
+function showAgentMessage() {
+  const agentDiv = document.createElement("div");
+  agentDiv.className = "agent";
+  agentDiv.textContent = agentMessage;
+  terminal.appendChild(agentDiv);
+  agentDiv.style.display = "block";
+
+  terminal.innerHTML += "\n\n<span class='blink'>_</span>";
+}
+
+setTimeout(showLine, 1000);
+</script>
+
+</body>
+</html>
