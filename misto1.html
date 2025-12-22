@@ -11,6 +11,27 @@
       text-align: center;
       padding: 40px;
     }
+   
+
+        .green-button {
+        display: inline-block;
+        background-color: #00ff66;   /* jasně zelená */
+        color: black;                /* text černý */
+        font-size: 20px;
+        font-weight: bold;
+        text-decoration: none;       /* odstraní podtržení */
+        padding: 12px 25px;
+        border-radius: 8px;
+        border: 2px solid #00cc44;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+    
+      .green-button:hover {
+        background-color: #00cc44;  /* tmavší zelená při hover */
+        color: white;
+        transform: scale(1.05);
+      }
 
     video {
       width: 100%;
@@ -60,27 +81,7 @@
       color: black;
     }
 
-    /* NÁPOVĚDA */
-    #hintBox {
-      display: none;
-      margin-top: 20px;
-      padding: 15px;
-      border: 1px dashed #666;
-      color: #ccc;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    #hintBtn {
-      background: #222;
-      color: #aaa;
-      cursor: pointer;
-    }
-
-    #hintBtn:hover {
-      color: white;
-    }
+   
   </style>
 </head>
 <body>
@@ -103,13 +104,18 @@
 
   <div id="message"></div>
 
-  <button id="hintBtn" onclick="toggleHint()">🕵️ Zobrazit nápovědu</button>
+  
+   
 
-  <div id="hintBox">
-    https://scratch.mit.edu/projects/1258459985
   </div>
 
   <a id="next" href="dalsi.html">Pokračovat →</a>
+  
+  
+  
+ <a href="https://play.creaticode.com/projects/69495dd508b890c381abcac7?version=1" target="_blank" class="green-button">
+  Začít s pátráním
+</a>
 
   <script>
     const video = document.getElementById("video");
@@ -141,10 +147,8 @@
       }
     }
 
-    function toggleHint() {
-      const hint = document.getElementById("hintBox");
-      hint.style.display = hint.style.display === "none" ? "block" : "none";
-    }
+    
+
   </script>
 
 </body>
