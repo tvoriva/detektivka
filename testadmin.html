@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>📍 Zadání</title>
+  <style>
+    body {
+      background: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+
+    video {
+      width: 100%;
+      max-width: 800px;
+      border-radius: 10px;
+      border: 2px solid #444;
+      margin-top: 20px;
+    }
+
+    button, input {
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 6px;
+      border: none;
+      margin: 10px;
+    }
+
+    #soundBtn, #restartBtn {
+      cursor: pointer;
+      background: #222;
+      color: #ccc;
+    }
+
+    #soundBtn:hover,
+    #restartBtn:hover {
+      color: white;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #next {
+      display: none;
+      margin-top: 30px;
+      font-size: 22px;
+      color: #00ffcc;
+      text-decoration: none;
+      border: 1px solid #00ffcc;
+      padding: 10px 20px;
+      border-radius: 8px;
+    }
+
+    #next:hover {
+      background: #00ffcc;
+      color: black;
+    }
+
+    /* NÁPOVĚDA */
+    #hintBox {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px dashed #666;
+      color: #ccc;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #hintBtn {
+      background: #222;
+      color: #aaa;
+      cursor: pointer;
+    }
+
+    #hintBtn:hover {
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📍 Zadání</h1>
+
+  <!-- TLAČÍTKA JSOU NAD VIDEEM -->
+  <button id="soundBtn" onclick="enableSound()">🔊 Zapnout zvuk</button>
+  <button id="restartBtn" onclick="restartVideo()">🔁 Přehrát znovu</button>
+
+  <video id="video" autoplay muted playsinline>
+    <source src="video.mp4" type="video/mp4">
+    Tvůj prohlížeč nepodporuje video.
+  </video>
+
+  <p>Zadej IP adresu:</p>
+
+  <input type="text" id="code" placeholder="kód">
+  <button onclick="checkCode()">OK</button>
+
+  <div id="message"></div>
+
+  <button id="hintBtn" onclick="toggleHint()">🕵️ Zobrazit nápovědu</button>
+
+  <div id="hintBox">
+   
+
+  </div>
+
+  <a id="next" href="dalsi.html">Pokračovat →</a>
+  
+  
+  
+   <iframe
+      src="https://play.creaticode.com/projects/69495dd508b890c381abcac7/embed?version=1&autoPlay=false&btnOptions=none"
+      width="485"
+      height="402"
+      frameborder="0"
+      scrolling="no"
+      allowfullscreen>
+    </iframe>
+
+  <script>
+    const video = document.getElementById("video");
+
+    function enableSound() {
+      video.muted = false;
+      video.play();
+      document.getElementById("soundBtn").style.display = "none";
+    }
+
+    function restartVideo() {
+      video.currentTime = 0;
+      video.play();
+    }
+
+    function checkCode() {
+      const code = document.getElementById("code").value;
+      const message = document.getElementById("message");
+      const next = document.getElementById("next");
+
+      if (code === "1422") {
+        message.textContent = "✔️ Kód je správný.";
+        message.style.color = "#00ffcc";
+        next.style.display = "inline-block";
+      } else {
+        message.textContent = "❌ Špatný kód.";
+        message.style.color = "red";
+        next.style.display = "none";
+      }
+    }
+
+    function toggleHint() {
+  const hint = document.getElementById("hintBox");
+
+  if (getComputedStyle(hint).display === "none") {
+    hint.style.display = "block";
+  } else {
+    hint.style.display = "none";
+  }
+}
+
+  </script>
+
+</body>
+</html>
