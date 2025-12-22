@@ -106,22 +106,10 @@
   <button id="hintBtn" onclick="toggleHint()">🕵️ Zobrazit nápovědu</button>
 
   <div id="hintBox">
-   
-
+    https://scratch.mit.edu/projects/1258459985
   </div>
 
   <a id="next" href="dalsi.html">Pokračovat →</a>
-  
-  
-  
-   <iframe
-      src="https://play.creaticode.com/projects/69495dd508b890c381abcac7/embed?version=1&autoPlay=false&btnOptions=none"
-      width="485"
-      height="402"
-      frameborder="0"
-      scrolling="no"
-      allowfullscreen>
-    </iframe>
 
   <script>
     const video = document.getElementById("video");
@@ -154,15 +142,9 @@
     }
 
     function toggleHint() {
-  const hint = document.getElementById("hintBox");
-
-  if (getComputedStyle(hint).display === "none") {
-    hint.style.display = "block";
-  } else {
-    hint.style.display = "none";
-  }
-}
-
+      const hint = document.getElementById("hintBox");
+      hint.style.display = hint.style.display === "none" ? "block" : "none";
+    }
   </script>
 
 </body>
