@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Sledování útočníka</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      color: #00ff99;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .terminal {
+      width: 720px;
+      max-width: 95%;
+      background: #020202;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 30px rgba(0,255,150,0.3);
+      white-space: pre-line;
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .sequence {
+      margin-top: 15px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .sequence button {
+      padding: 10px 15px;
+      font-family: monospace;
+      font-size: 15px;
+      background: #111;
+      color: #00ff99;
+      border: 1px solid #00ff99;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .sequence button:hover {
+      background: #00ff99;
+      color: #000;
+    }
+
+    .timer-top {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .blink {
+      animation: blink 0.5s infinite;
+      color: #ff3333;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    .fail-screen {
+      position: fixed;
+      inset: 0;
+      background: #8b0000;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 28px;
+      text-align: center;
+      z-index: 999;
+    }
+
+    .fail-screen small {
+      font-size: 16px;
+      margin-top: 10px;
+      opacity: 0.8;
+    }
+
+    .fail-screen a {
+      color: white;
+      margin-top: 20px;
+      font-size: 16px;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div class="timer-top" id="timer">⏱ 15 s</div>
+
+<div class="terminal" id="terminal">
+NAVÁZÁNÍ SLEDOVÁNÍ…
+ZACHYCEN TOK DAT…
+Útočník mění lokaci…
+Zapamatujte si správnou sekvenci lokalit:
+</div>
+
+<div class="sequence" id="sequence"></div>
+
+<script>
+const terminal = document.getElementById("terminal");
+const sequenceDiv = document.getElementById("sequence");
+const timerEl = document.getElementById("timer");
+
+let timeLeft = 15;
+let timer;
+
+const locations = ["Praha", "Brno", "Ostrava", "Plzeň", "Liberec"];
+let sequence = [];
+let userIndex = 0;
+
+function generateSequence(length) {
+  const seq = [];
+  for(let i=0; i<length; i++){
+    const idx = Math.floor(Math.random() * locations.length);
+    seq.push(locations[idx]);
+  }
+  return seq;
+}
+
+function showSequence(seq) {
+  terminal.innerHTML += "\nSekvence:";
+  sequenceDiv.innerHTML = "";
+  let i = 0;
+  const interval = setInterval(() => {
+    if(i > 0) sequenceDiv.innerHTML = "";
+    if(i < seq.length){
+      const btn = document.createElement("button");
+      btn.textContent = seq[i];
+      btn.disabled = true; // jen pro zobrazení
+      sequenceDiv.appendChild(btn);
+      i++;
+    } else {
+      clearInterval(interval);
+      setTimeout(() => {
+        sequenceDiv.innerHTML = "";
+        userIndex = 0; // reset indexu
+        displayChoices();
+      }, 500);
+    }
+  }, 800);
+}
+
+function displayChoices() {
+  sequenceDiv.innerHTML = "";
+  // zobrazíme pouze unikátní lokace ze sekvence
+  const uniqueLocations = [...new Set(sequence)];
+  uniqueLocations.forEach(loc => {
+    const btn = document.createElement("button");
+    btn.textContent = loc;
+    btn.onclick = () => checkChoice(loc);
+    sequenceDiv.appendChild(btn);
+  });
+}
+
+function checkChoice(choice) {
+  if(choice === sequence[userIndex]){
+    userIndex++;
+    if(userIndex === sequence.length){
+      winGame();
+    }
+  } else {
+    loseGame();
+  }
+}
+
+function startTimer() {
+  timerEl.textContent = "⏱ " + timeLeft + " s";
+  timer = setInterval(() => {
+    timeLeft--;
+    timerEl.textContent = "⏱ " + timeLeft + " s";
+    if(timeLeft <= 3){
+      timerEl.classList.add("blink");
+    }
+    if(timeLeft <= 0){
+      loseGame();
+    }
+  }, 1000);
+}
+
+function winGame() {
+  clearInterval(timer);
+  timerEl.textContent = "✔ Útočník sledován";
+  setTimeout(() => {
+    window.location.href = "final.html";
+  }, 1000);
+}
+
+function loseGame() {
+  clearInterval(timer);
+  document.body.innerHTML = "";
+  const fail = document.createElement("div");
+  fail.className = "fail-screen";
+  fail.innerHTML = `
+    <div>PROHRÁL JSI</div>
+    <small>Útočník unikl, byl jsi vyhozen z práce</small>
+    <a href="tracktwo.html">Zkusit znovu</a>
+  `;
+  document.body.appendChild(fail);
+}
+
+function startGame() {
+  sequence = generateSequence(3 + Math.floor(Math.random() * 3)); // délka 3–5 kroků
+  terminal.innerHTML += "\nPřipravte se…"; // krátký čas na přípravu
+  setTimeout(() => {
+    showSequence(sequence);
+  }, 2000); // 2 sekundy prodleva
+  startTimer();
+}
+
+setTimeout(startGame, 1000);
+</script>
+
+</body>
+</html>
