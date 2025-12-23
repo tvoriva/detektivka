@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Odhalení IP adresy</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      color: #00ff99;
+      font-family: monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .terminal {
+      width: 720px;
+      max-width: 95%;
+      background: #020202;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 30px rgba(0,255,150,0.3);
+      white-space: pre-line;
+    }
+
+    .agent {
+      margin-top: 20px;
+      padding: 15px;
+      border-left: 3px solid #00ff99;
+      color: #ffffff;
+      display: none;
+    }
+
+    .choices {
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-family: monospace;
+      font-size: 15px;
+      background: #111;
+      color: #00ff99;
+      border: 1px solid #00ff99;
+      cursor: pointer;
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+
+    button:hover {
+      background: #00ff99;
+      color: #000;
+    }
+
+    .warning {
+      color: #ff3333;
+      font-weight: bold;
+      text-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
+    }
+
+    .blink {
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="terminal" id="terminal">
+Result
+</div>
+
+<script>
+const terminal = document.getElementById("terminal");
+
+// TERMINÁL – TEXT
+const lines = [
+  "Starting infograbber.exe on pc88-98 (počítač útočníka)",
+  "Program started...",
+  "processing...",
+  "",
+  "ending process...",
+  "",
+  "Result:",
+  "IP: 14.564.789.21"
+];
+
+// ZPRÁVA OD AGENTA
+const agentMessage = `
+📩 ZPRÁVA OD AGENTA A-48:
+
+Dobrý den, kolego.
+Gratulujeme získali IP.
+Tip: Napište IP adresu do té první stránky (zadání)
+
+`;
+
+let i = 0;
+
+function showLine() {
+  if (i < lines.length) {
+
+    const line = lines[i];
+
+    if (
+      line.includes("IP: 14.564.789.21") ||
+      line.includes("ÚTOČNÍK MÁ PŘÍSTUP")
+    ) {
+      terminal.innerHTML += "\n<span class='warning'>" + line + "</span>";
+    } else {
+      terminal.innerHTML += "\n" + line;
+    }
+
+    i++;
+    setTimeout(showLine, 800);
+
+  } else {
+    showAgentMessage();
+  }
+}
+
+function showAgentMessage() {
+  const agentDiv = document.createElement("div");
+  agentDiv.className = "agent";
+  agentDiv.textContent = agentMessage;
+  terminal.appendChild(agentDiv);
+  agentDiv.style.display = "block";
+
+  const choices = document.createElement("div");
+  choices.className = "choices";
+
+  const btnTrack = document.createElement("button");
+  btnTrack.textContent = "-> zadat IP";
+  btnTrack.onclick = () => {
+    window.location.href = "https://tvoriva.github.io/detektivka/misto1.html";
+  };
+
+  const btnFix = document.createElement("button");
+  btnFix.textContent = "TEST BUTTON";
+  btnFix.onclick = () => {
+    window.location.href = "";
+  };
+
+  choices.appendChild(btnTrack);
+  choices.appendChild(btnFix);
+  terminal.appendChild(choices);
+
+  terminal.appendChild(document.createElement("br"));
+  const blink = document.createElement("span");
+  blink.className = "blink";
+  blink.textContent = "_";
+  terminal.appendChild(blink);
+}
+
+setTimeout(showLine, 1000);
+</script>
+
+</body>
+</html>
