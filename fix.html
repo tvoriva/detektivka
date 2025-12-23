@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Nouzová oprava serveru</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      color: #00ff99;
+      font-family: monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      transition: background 0.5s;
+    }
+
+    .timer-top {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 40px;
+      font-weight: bold;
+      z-index: 10;
+      color: red;
+    }
+
+    .blink {
+      animation: blink 0.5s infinite;
+      color: #ff3333;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    .terminal {
+      width: 720px;
+      max-width: 95%;
+      background: #020202;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 30px rgba(0,255,150,0.3);
+      white-space: pre-line;
+    }
+
+    input {
+      width: 100%;
+      margin-top: 10px;
+      background: black;
+      color: #00ff99;
+      border: 1px solid #00ff99;
+      padding: 8px;
+      font-family: monospace;
+      font-size: 14px;
+    }
+
+    .fail-screen {
+      position: fixed;
+      inset: 0;
+      background: #8b0000;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 28px;
+      text-align: center;
+      z-index: 999;
+    }
+
+    .fail-screen small {
+      font-size: 16px;
+      margin-top: 10px;
+      opacity: 0.8;
+    }
+
+    .fail-screen a {
+      color: white;
+      margin-top: 20px;
+      font-size: 16px;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div class="timer-top" id="timer">⏱ 30 s</div>
+
+<div class="terminal" id="terminal">
+⚠ NOUZOVÁ OPRAVA SERVERU ⚠
+
+Útočník stahuje data.
+Zadejte příkazy rychle a bez chyb.
+</div>
+
+<script>
+const terminal = document.getElementById("terminal");
+const timerEl = document.getElementById("timer");
+
+const commands = [
+  "sudo systemctl restart firewall",
+  "iptables -F",
+  "netstat -an"
+];
+
+let current = 0;
+let timeLeft = 30;
+let timer;
+
+function startGame() {
+  showCommand();
+  startTimer();
+}
+
+function showCommand() {
+  terminal.innerHTML += "\nZadejte příkaz:\n> " + commands[current] + "\n";
+
+  const input = document.createElement("input");
+  input.autofocus = true;
+
+  input.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      if (input.value.trim() === commands[current]) {
+        input.remove();
+        current++;
+
+        if (current === commands.length) {
+          winGame();
+        } else {
+          showCommand();
+        }
+      } else {
+        loseGame();
+      }
+    }
+  });
+
+  terminal.appendChild(input);
+}
+
+function startTimer() {
+  timer = setInterval(() => {
+    timeLeft--;
+    timerEl.textContent = "⏱ " + timeLeft + " s";
+
+    if (timeLeft <= 3) {
+      timerEl.classList.add("blink");
+    }
+
+    if (timeLeft <= 0) {
+      loseGame();
+    }
+  }, 1000);
+}
+
+function winGame() {
+  clearInterval(timer);
+  timerEl.textContent = "✔ SERVER ZACHRÁNĚN";
+  setTimeout(() => {
+    window.location.href = "final.html";
+  }, 1500);
+}
+
+function loseGame() {
+  clearInterval(timer);
+
+  const fail = document.createElement("div");
+  fail.className = "fail-screen";
+  fail.innerHTML = `
+    <div>PROHRÁL JSI</div>
+    <small>Byl jsi vyhozen z práce. Útočník utekl!</small>
+    <a href="https://tvoriva.github.io/detektivka/messagetwo.html">Zkusit znovu</a>
+  `;
+
+  document.body.appendChild(fail);
+}
+
+setTimeout(startGame, 1000);
+</script>
+
+</body>
+</html>
