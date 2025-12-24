@@ -79,6 +79,22 @@
 const terminal = document.getElementById("terminal");
 const body = document.body;
 const audio = document.getElementById("voice");
+let audioUnlocked = false;
+
+function unlockAudio() {
+  if (!audioUnlocked) {
+    audio.play().then(() => {
+      audio.pause();
+      audio.currentTime = 0;
+      audioUnlocked = true;
+    }).catch(() => {});
+  }
+}
+
+document.addEventListener("click", unlockAudio);
+document.addEventListener("keydown", unlockAudio);
+
+  
 
 const text = "SLEDOVÁNÍ UKONČENO.";
 let i = 0;
