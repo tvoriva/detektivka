@@ -160,7 +160,7 @@ function winGame() {
   clearInterval(timer);
   timerEl.textContent = "✔ SERVER ZACHRÁNĚN";
   setTimeout(() => {
-    window.location.href = "final.html";
+    window.location.href = "https://tvoriva.github.io/detektivka/messagethree.html";
   }, 1500);
 }
 
@@ -172,7 +172,7 @@ function loseGame() {
   fail.innerHTML = `
     <div>PROHRÁL JSI</div>
     <small>Byl jsi vyhozen z práce. Útočník utekl!</small>
-    <a href="https://tvoriva.github.io/detektivka/messagetwo.html">Zkusit znovu</a>
+    <a href="https://tvoriva.github.io/detektivka/fix.html">Zkusit znovu</a>
   `;
 
   document.body.appendChild(fail);
