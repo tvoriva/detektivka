@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<title>Sledování ukončeno</title>
+
+<style>
+  body {
+    margin: 0;
+    background: black;
+    color: #00ff99;
+    font-family: monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    transition: background 1s;
+  }
+
+  .terminal {
+    font-size: 22px;
+    text-align: center;
+    white-space: pre-line;
+    z-index: 2;
+  }
+
+  /* POMALÉ blikání */
+  .blink {
+    animation: blink 5s infinite;
+  }
+
+  @keyframes blink {
+    0% { background: black; }
+    50% { background: #5a0000; }
+    100% { background: black; }
+  }
+
+  /* Pixel/blur */
+  .glitch {
+    animation: glitch 1.5s infinite;
+  }
+
+  @keyframes glitch {
+    0% { filter: blur(0px); }
+    50% { filter: blur(4px); }
+    100% { filter: blur(0px); }
+  }
+
+  /* Náhodné znaky */
+  .char {
+    position: absolute;
+    color: #00ff99;
+    font-size: 14px;
+    opacity: 0.8;
+    animation: float 3s linear forwards;
+    pointer-events: none;
+  }
+
+  @keyframes float {
+    from {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(-120px);
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="terminal" id="terminal"></div>
+<audio id="voice" src="voice.mp3"></audio>
+
+<script>
+const terminal = document.getElementById("terminal");
+const body = document.body;
+const audio = document.getElementById("voice");
+
+const text = "SLEDOVÁNÍ UKONČENO.";
+let i = 0;
+let chaosInterval;
+
+const chars = "!@#$%^&*()_+-=[]{}<>?/\\|█▓▒░67memejejohhellnahyoufoundme!";
+
+function typeText() {
+  if (i < text.length) {
+    terminal.textContent += text[i];
+    i++;
+    setTimeout(typeText, 80);
+  } else {
+    setTimeout(startChaos, 2000);
+  }
+}
+
+function startChaos() {
+  terminal.classList.add("glitch");
+  body.classList.add("blink");
+
+  // náhodné znaky pomalu
+  chaosInterval = setInterval(spawnChar, 1);
+
+  // hlas
+  setTimeout(() => {
+    audio.play();
+  }, 1500);
+}
+
+function spawnChar() {
+  const span = document.createElement("span");
+  span.className = "char";
+  span.textContent = chars[Math.floor(Math.random() * chars.length)];
+  span.style.left = Math.random() * window.innerWidth + "px";
+  span.style.top = Math.random() * window.innerHeight + "px";
+  document.body.appendChild(span);
+
+  setTimeout(() => {
+    span.remove();
+  }, 3000);
+}
+
+setTimeout(typeText, 1000);
+</script>
+
+</body>
+</html>
