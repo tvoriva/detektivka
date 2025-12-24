@@ -87,6 +87,8 @@
     font-size: 26px;
     z-index: 10;
     padding: 20px;
+    opacity: 0;
+    transition: opacity 3s ease-in;
   }
 </style>
 </head>
@@ -110,10 +112,22 @@ const finalTextDiv = document.getElementById("finalText");
 
 const text = "SLEDOVÁNÍ UKONČENO.";
 const FINAL_MESSAGE = `
-TADY SI NASTAV TEXT.
+▌ MISE UKONČENA ▐
 
-Něco skončilo.
-Něco právě začíná.
+NAPŮL JSI USPĚL, AGENTE.
+
+Identita útočníka zatím nebyla odhalena.
+Prozatím přebírá sledování agent B-89.
+
+Zůstaň v pohotovosti.
+Je možné, že budeme znovu potřebovat tvou pomoc.
+
+Děkujeme za službu,
+agent A-89 (ty)
+
+
+
+— vytvořil Matyáš Horváth
 `;
 
 const chars = "!@#$%^&*()_+-=[]{}<>?/\\|█▓▒░";
@@ -145,13 +159,13 @@ function typeText() {
 function startChaos() {
   terminal.classList.add("glitch");
   body.classList.add("blink");
-  chaosInterval = setInterval(spawnChar, 300);
+  chaosInterval = setInterval(spawnChar, 3);
 
   setTimeout(() => {
     audio.play();
   }, 2000);
 
-  // ⬇️ PO 7 SEKUNDÁCH KONEC
+  // Konec chaosu po 15 sekundách
   setTimeout(endScene, 15000);
 }
 
@@ -173,6 +187,11 @@ function endScene() {
 
   finalTextDiv.style.display = "flex";
   finalTextDiv.textContent = FINAL_MESSAGE;
+
+  // fade-in
+  setTimeout(() => {
+    finalTextDiv.style.opacity = 1;
+  }, 200);
 }
 </script>
 
