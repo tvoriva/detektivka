@@ -15,6 +15,7 @@
     align-items: center;
     height: 100vh;
     overflow: hidden;
+    transition: background 2s;
   }
 
   .terminal {
@@ -24,7 +25,6 @@
     z-index: 2;
   }
 
-  /* Start tlačítko */
   .start-btn {
     padding: 14px 22px;
     font-family: monospace;
@@ -41,7 +41,6 @@
     color: #000;
   }
 
-  /* Pomalé blikání */
   .blink {
     animation: blink 1.2s infinite;
   }
@@ -52,7 +51,6 @@
     100% { background: black; }
   }
 
-  /* Glitch */
   .glitch {
     animation: glitch 1.5s infinite;
   }
@@ -63,7 +61,6 @@
     100% { filter: blur(0px); }
   }
 
-  /* Náhodné znaky */
   .char {
     position: absolute;
     color: #00ff99;
@@ -77,32 +74,55 @@
     from { transform: translateY(0); opacity: 1; }
     to { transform: translateY(-120px); opacity: 0; }
   }
+
+  .final-text {
+    position: fixed;
+    inset: 0;
+    background: black;
+    color: #ffffff;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 26px;
+    z-index: 10;
+    padding: 20px;
+  }
 </style>
 </head>
 
 <body>
 
 <div class="terminal" id="terminal">
-<button class="start-btn" id="startBtn">▶ Spustit přenos</button>
+  <button class="start-btn" id="startBtn">▶ Spustit přenos</button>
 </div>
 
-<audio id="voice" src="voice.mp3"></audio>
+<div class="final-text" id="finalText"></div>
+
+<audio id="voice" src="sound.mp3"></audio>
 
 <script>
 const terminal = document.getElementById("terminal");
 const startBtn = document.getElementById("startBtn");
 const audio = document.getElementById("voice");
 const body = document.body;
+const finalTextDiv = document.getElementById("finalText");
 
 const text = "SLEDOVÁNÍ UKONČENO.";
+const FINAL_MESSAGE = `
+TADY SI NASTAV TEXT.
+
+Něco skončilo.
+Něco právě začíná.
+`;
+
 const chars = "!@#$%^&*()_+-=[]{}<>?/\\|█▓▒░";
 
 let i = 0;
 let chaosInterval;
 
-// klik = interakce = audio povoleno
+// start
 startBtn.onclick = () => {
-  // odemčení audia
   audio.play().then(() => {
     audio.pause();
     audio.currentTime = 0;
@@ -125,13 +145,14 @@ function typeText() {
 function startChaos() {
   terminal.classList.add("glitch");
   body.classList.add("blink");
+  chaosInterval = setInterval(spawnChar, 300);
 
-  chaosInterval = setInterval(spawnChar, 3);
-
-  // hlas po chvíli
   setTimeout(() => {
     audio.play();
   }, 2000);
+
+  // ⬇️ PO 7 SEKUNDÁCH KONEC
+  setTimeout(endScene, 15000);
 }
 
 function spawnChar() {
@@ -141,8 +162,17 @@ function spawnChar() {
   span.style.left = Math.random() * window.innerWidth + "px";
   span.style.top = Math.random() * window.innerHeight + "px";
   document.body.appendChild(span);
-
   setTimeout(() => span.remove(), 3000);
+}
+
+function endScene() {
+  clearInterval(chaosInterval);
+
+  body.classList.remove("blink");
+  terminal.style.display = "none";
+
+  finalTextDiv.style.display = "flex";
+  finalTextDiv.textContent = FINAL_MESSAGE;
 }
 </script>
 
