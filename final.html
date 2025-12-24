@@ -15,7 +15,6 @@
     align-items: center;
     height: 100vh;
     overflow: hidden;
-    transition: background 1s;
   }
 
   .terminal {
@@ -25,9 +24,26 @@
     z-index: 2;
   }
 
-  /* POMALÉ blikání */
+  /* Start tlačítko */
+  .start-btn {
+    padding: 14px 22px;
+    font-family: monospace;
+    font-size: 16px;
+    background: #111;
+    color: #00ff99;
+    border: 1px solid #00ff99;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  .start-btn:hover {
+    background: #00ff99;
+    color: #000;
+  }
+
+  /* Pomalé blikání */
   .blink {
-    animation: blink 5s infinite;
+    animation: blink 1.2s infinite;
   }
 
   @keyframes blink {
@@ -36,7 +52,7 @@
     100% { background: black; }
   }
 
-  /* Pixel/blur */
+  /* Glitch */
   .glitch {
     animation: glitch 1.5s infinite;
   }
@@ -58,49 +74,43 @@
   }
 
   @keyframes float {
-    from {
-      transform: translateY(0);
-      opacity: 1;
-    }
-    to {
-      transform: translateY(-120px);
-      opacity: 0;
-    }
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(-120px); opacity: 0; }
   }
 </style>
 </head>
 
 <body>
 
-<div class="terminal" id="terminal"></div>
+<div class="terminal" id="terminal">
+<button class="start-btn" id="startBtn">▶ Spustit přenos</button>
+</div>
+
 <audio id="voice" src="voice.mp3"></audio>
 
 <script>
 const terminal = document.getElementById("terminal");
-const body = document.body;
+const startBtn = document.getElementById("startBtn");
 const audio = document.getElementById("voice");
-let audioUnlocked = false;
-
-function unlockAudio() {
-  if (!audioUnlocked) {
-    audio.play().then(() => {
-      audio.pause();
-      audio.currentTime = 0;
-      audioUnlocked = true;
-    }).catch(() => {});
-  }
-}
-
-document.addEventListener("click", unlockAudio);
-document.addEventListener("keydown", unlockAudio);
-
-  
+const body = document.body;
 
 const text = "SLEDOVÁNÍ UKONČENO.";
+const chars = "!@#$%^&*()_+-=[]{}<>?/\\|█▓▒░";
+
 let i = 0;
 let chaosInterval;
 
-const chars = "!@#$%^&*()_+-=[]{}<>?/\\|█▓▒░67memejejohhellnahyoufoundme!";
+// klik = interakce = audio povoleno
+startBtn.onclick = () => {
+  // odemčení audia
+  audio.play().then(() => {
+    audio.pause();
+    audio.currentTime = 0;
+  }).catch(() => {});
+
+  startBtn.remove();
+  setTimeout(typeText, 500);
+};
 
 function typeText() {
   if (i < text.length) {
@@ -116,13 +126,12 @@ function startChaos() {
   terminal.classList.add("glitch");
   body.classList.add("blink");
 
-  // náhodné znaky pomalu
-  chaosInterval = setInterval(spawnChar, 1);
+  chaosInterval = setInterval(spawnChar, 3);
 
-  // hlas
+  // hlas po chvíli
   setTimeout(() => {
     audio.play();
-  }, 1500);
+  }, 2000);
 }
 
 function spawnChar() {
@@ -133,12 +142,8 @@ function spawnChar() {
   span.style.top = Math.random() * window.innerHeight + "px";
   document.body.appendChild(span);
 
-  setTimeout(() => {
-    span.remove();
-  }, 3000);
+  setTimeout(() => span.remove(), 3000);
 }
-
-setTimeout(typeText, 1000);
 </script>
 
 </body>
